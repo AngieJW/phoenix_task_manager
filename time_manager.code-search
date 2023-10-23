@@ -1,0 +1,157 @@
+# Query: time_manager
+# ContextLines: 1
+
+35 results - 13 files
+
+task_manager/.gitignore:
+  24  # Ignore package tarball (built via "mix hex.build").
+  25  # Ignore package tarball (built via "mix hex.build").
+  26: task_manager-*.tar
+  26  
+  27  
+
+task_manager/mix.exs:
+  5      [
+  6:       app: :task_manager,
+  7        version: "0.1.0",
+
+task_manager/config/config.exs:
+   9  
+  10: config :task_manager,
+  11    namespace: Todolist,
+
+  15  # Configures the endpoint
+  16: config :task_manager, TodolistWeb.Endpoint,
+  17    url: [host: "localhost"],
+
+  32  # at the `config/runtime.exs`.
+  33: config :task_manager, Todolist.Mailer, adapter: Swoosh.Adapters.Local
+  34  
+
+task_manager/config/dev.exs:
+   3  # Configure your database
+   4: config :task_manager, Todolist.Repo,
+   5    username: "postgres",
+
+   7    hostname: "localhost",
+   8:   database: "task_manager_dev",
+   9    stacktrace: true,
+
+  18  # to bundle .js and .css sources.
+  19: config :task_manager, TodolistWeb.Endpoint,
+  20    # Binding to loopback ipv4 address prevents access from other machines.
+
+  52  # Enable dev routes for dashboard and mailbox
+  53: config :task_manager, dev_routes: true
+  54  
+
+task_manager/config/runtime.exs:
+   14  #
+   15: #     PHX_SERVER=true bin/task_manager start
+   16  #
+
+   19  if System.get_env("PHX_SERVER") do
+   20:   config :task_manager, TodolistWeb.Endpoint, server: true
+   21  end
+
+   32  
+   33:   config :task_manager, Todolist.Repo,
+   34      # ssl: true,
+
+   53  
+   54:   config :task_manager, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
+   55  
+   56:   config :task_manager, TodolistWeb.Endpoint,
+   57      url: [host: host, port: 443, scheme: "https"],
+
+   72    #
+   73:   #     config :task_manager, TodolistWeb.Endpoint,
+   74    #       https: [
+
+   94    #
+   95:   #     config :task_manager, TodolistWeb.Endpoint,
+   96    #       force_ssl: [hsts: true]
+
+  105    #
+  106:   #     config :task_manager, Todolist.Mailer,
+  107    #       adapter: Swoosh.Adapters.Mailgun,
+
+task_manager/config/test.exs:
+   7  # Run `mix help test` for more information.
+   8: config :task_manager, Todolist.Repo,
+   9    username: "postgres",
+
+  11    hostname: "localhost",
+  12:   database: "task_manager_test#{System.get_env("MIX_TEST_PARTITION")}",
+  13    pool: Ecto.Adapters.SQL.Sandbox,
+
+  17  # you can enable the server option below.
+  18: config :task_manager, TodolistWeb.Endpoint,
+  19    http: [ip: {127, 0, 0, 1}, port: 4002],
+
+  23  # In test we don't send emails.
+  24: config :task_manager, Todolist.Mailer, adapter: Swoosh.Adapters.Test
+  25  
+
+task_manager/lib/task_manager/application.ex:
+  12        Todolist.Repo,
+  13:       {DNSCluster, query: Application.get_env(:task_manager, :dns_cluster_query) || :ignore},
+  14        {Phoenix.PubSub, name: Todolist.PubSub},
+
+task_manager/lib/task_manager/mailer.ex:
+  1  defmodule Todolist.Mailer do
+  2:   use Swoosh.Mailer, otp_app: :task_manager
+  3  end
+
+task_manager/lib/task_manager/repo.ex:
+  2    use Ecto.Repo,
+  3:     otp_app: :task_manager,
+  4      adapter: Ecto.Adapters.Postgres
+
+task_manager/lib/task_manager_web/endpoint.ex:
+   1  defmodule TodolistWeb.Endpoint do
+   2:   use Phoenix.Endpoint, otp_app: :task_manager
+   3  
+
+   8      store: :cookie,
+   9:     key: "_task_manager_key",
+  10      signing_salt: "hvMd2jWq",
+
+  21      at: "/",
+  22:     from: :task_manager,
+  23      gzip: false,
+
+  29      plug Phoenix.CodeReloader
+  30:     plug Phoenix.Ecto.CheckRepoStatus, otp_app: :task_manager
+  31    end
+
+task_manager/lib/task_manager_web/gettext.ex:
+  22    """
+  23:   use Gettext, otp_app: :task_manager
+  24  end
+
+task_manager/lib/task_manager_web/router.ex:
+  12    # Enable LiveDashboard and Swoosh mailbox preview in development
+  13:   if Application.compile_env(:task_manager, :dev_routes) do
+  14      # If you want to use the LiveDashboard in production, you should put
+
+task_manager/lib/task_manager_web/telemetry.ex:
+  54        # Database Metrics
+  55:       summary("task_manager.repo.query.total_time",
+  56          unit: {:native, :millisecond},
+
+  58        ),
+  59:       summary("task_manager.repo.query.decode_time",
+  60          unit: {:native, :millisecond},
+
+  62        ),
+  63:       summary("task_manager.repo.query.query_time",
+  64          unit: {:native, :millisecond},
+
+  66        ),
+  67:       summary("task_manager.repo.query.queue_time",
+  68          unit: {:native, :millisecond},
+
+  70        ),
+  71:       summary("task_manager.repo.query.idle_time",
+  72          unit: {:native, :millisecond},
