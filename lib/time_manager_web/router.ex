@@ -10,6 +10,10 @@ defmodule TodolistWeb.Router do
     resources "/users", UserController, except: [:new, :edit]
   end
 
+  scope "/api/tasks", TodolistWeb do
+    pipe_through :api
+
+  end
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:task_manager, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
